@@ -3,7 +3,7 @@
 
 ## 添加插件依赖
 ### 单模块项目
-1.配置jacoco 
+1. 配置jacoco 
 引入依赖
 ```xml
 <dependency>
@@ -12,7 +12,7 @@
     <version>0.8.2</version>
 </dependency>
 ```
-2.引入插件
+2. 引入插件
 ```xml
 <plugin>
         <groupId>org.jacoco</groupId>
@@ -50,7 +50,7 @@
         </executions>
       </plugin>
 ```
-3.pom中引入本插件
+3. pom中引入本插件
 ```xml
 <plugin>
         <groupId>com.souche</groupId>
@@ -69,14 +69,14 @@
         </executions>
       </plugin>
 ```
-4.执行下列命令：
+4. 执行下列命令：
 ```
 mvn test jacoco:report 
 mvn cover:cover-report
 ```
 
-### 2 多模块项目
-1.父pom中引入jacoco插件及依赖
+### 多模块项目
+1. 父pom中引入jacoco插件及依赖
 ```xml
 <dependency>
     <groupId>org.jacoco</groupId>
@@ -91,7 +91,7 @@ mvn cover:cover-report
         <version>0.8.2</version>
  </plugin>
 ```
-2.父pom下引入本插件
+2. 父pom下引入本插件
 ```xml
 <plugin>
         <groupId>com.souche</groupId>
@@ -99,7 +99,7 @@ mvn cover:cover-report
         <version>1.2.2-SNAPSHOT</version>
 </plugin>
 ```
-3.每个子pom文件新增jacoco插件及依赖，同时配置jacoco
+3. 每个子pom文件新增jacoco插件及依赖，同时配置jacoco
 ```xml
 <dependency>
     <groupId>org.jacoco</groupId>
@@ -142,7 +142,7 @@ mvn cover:cover-report
         </executions>
       </plugin>
 ```
-4.子pom文件中引入本插件
+4. 子pom文件中引入本插件
 ```xml
 <plugin>
         <groupId>com.souche</groupId>
@@ -161,7 +161,7 @@ mvn cover:cover-report
         </executions>
       </plugin>
 ```
-5.在父pom下执行命令
+5. 在父pom下执行命令
 ```
 mvn test jacoco:report 
 mvn cover:cover-report
