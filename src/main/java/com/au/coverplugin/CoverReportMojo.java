@@ -23,7 +23,7 @@ import org.apache.maven.plugins.annotations.Parameter;
  * @Description:
  * @Date: 6:12 PM 2019/1/17
  */
-@Mojo(name = "cover-report", defaultPhase = LifecyclePhase.PACKAGE, requiresDirectInvocation = true)
+@Mojo(name = "cover-report", defaultPhase = LifecyclePhase.NONE, requiresDirectInvocation = true)
 public class CoverReportMojo extends AbstractMojo{
 
     @Parameter(property = "target", defaultValue = "${project.build.directory}")
