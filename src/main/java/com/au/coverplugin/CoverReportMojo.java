@@ -39,8 +39,8 @@ public class CoverReportMojo extends AbstractMojo{
     protected String project;
 
     //TODO:指定上传地址
-    @Parameter(property = "covercenterUrl", defaultValue = "")
-    protected String covercenterUrl;
+    @Parameter(property = "uploadUrl")
+    protected String uploadUrl;
 
     @Parameter(property = "report", defaultValue = "jacoco")
     protected String report;
@@ -68,7 +68,7 @@ public class CoverReportMojo extends AbstractMojo{
                 return;
             }
             Report report = factory.buildHtmlReport();
-            CoverClient coverClient = new CoverClient(covercenterUrl, report);
+            CoverClient coverClient = new CoverClient(uploadUrl, report);
             String id = coverClient.submit().getData();
             CoverCenterResponse response = coverClient.upload(id);
             getLog().info(response.getData());
