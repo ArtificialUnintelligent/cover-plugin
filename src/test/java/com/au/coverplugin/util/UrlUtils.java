@@ -42,46 +42,46 @@ public class UrlUtils {
     }
 
     public static void main(String[] args) throws JsonProcessingException, IllegalAccessException {
-        Git.Head head = new Git.Head("aea42c047133c9b1c49c97137c20df409bb343bb",
-            "observer",
-            "823655851@qq.com",
-            "observer",
-            "823655851@qq.com",
-            "@test 使用coverplugin插件",
-            new Date());
-        List<Git.Remote> remotes = new ArrayList<>();
-        //todo : git address and group
-        Git.Remote remote = new Git.Remote("origin", "", "");
-        remotes.add(remote);
-        //todo : pro dir and branch
-        Git git = new Git(new File(""), head, "", remotes);
-//        ReportFactory reportFactory = new JacocoReportFactory("cupid-arrow", git, "src/test/files");
-//        Report report = reportFactory.buildReport();
-//        Assert.assertNotNull(report);
-
-        Coverage coverage = new Coverage();
-        coverage.setBranchCovered(100);
-        coverage.setBranchMissed(10);
-        coverage.setClassCovered(10);
-        coverage.setClassMissed(20);
-        coverage.setComplexityCovered(200);
-        coverage.setComplexityMissed(500);
-        coverage.setLineCovered(200);
-        coverage.setLineMissed(500);
-        Report r = new Report();
-        r.setFile(new File("src/test/files/target/coverage-xmlevent.zip"));
-        r.setFileName("coverage-xmlevent.zip");
-        r.setGit(git);
-        r.setCoverage(coverage);
-
-        ReportDOC reportDOC = new ReportDOC();
-        try {
-            reportDOC.buildReportDOC(r);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println(objectMapper.writeValueAsString(reportDOC));
-        buildUrlParams(reportDOC);
+//        Git.Head head = new Git.Head("aea42c047133c9b1c49c97137c20df409bb343bb",
+//            "observer",
+//            "823655851@qq.com",
+//            "observer",
+//            "823655851@qq.com",
+//            "@test 使用coverplugin插件",
+//            new Date());
+//        List<Git.Remote> remotes = new ArrayList<>();
+//        //todo : git address and group
+//        Git.Remote remote = new Git.Remote("origin", "", "");
+//        remotes.add(remote);
+//        //todo : pro dir and branch
+//        Git git = new Git(new File(""), head, "", remotes);
+////        ReportFactory reportFactory = new JacocoReportFactory("cupid-arrow", git, "src/test/files");
+////        Report report = reportFactory.buildReport();
+////        Assert.assertNotNull(report);
+//
+//        Coverage coverage = new Coverage();
+//        coverage.setBranchCovered(100);
+//        coverage.setBranchMissed(10);
+//        coverage.setClassCovered(10);
+//        coverage.setClassMissed(20);
+//        coverage.setComplexityCovered(200);
+//        coverage.setComplexityMissed(500);
+//        coverage.setLineCovered(200);
+//        coverage.setLineMissed(500);
+//        Report r = new Report();
+//        r.setFile(new File("src/test/files/target/coverage-xmlevent.zip"));
+//        r.setFileName("coverage-xmlevent.zip");
+//        r.setGit(git);
+//        r.setCoverage(coverage);
+//
+//        ReportDOC reportDOC = new ReportDOC();
+//        try {
+//            reportDOC.buildReportDOC(r);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        System.out.println(objectMapper.writeValueAsString(reportDOC));
+//        buildUrlParams(reportDOC);
     }
 }

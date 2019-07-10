@@ -4,6 +4,7 @@ import com.au.coverplugin.domain.Coverage;
 import com.au.coverplugin.parser.JacocoParser;
 import com.au.coverplugin.domain.Git;
 import com.au.coverplugin.parser.BaseParser;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.Optional;
@@ -17,15 +18,18 @@ public class JacocoReportFactory extends ReportFactory {
 
     private static final String REPORT_FILE_DIR = "/site/jacoco";
 
-    private static final String REPORT_INFO = "/jacoco.xml";
+    private static final String REPORT_FILE = "/jacoco.xml";
 
-    public JacocoReportFactory(String project, Git git, String sourcePath) {
-        super(project, git, sourcePath);
+    public JacocoReportFactory(String project, Git git, String sourcePath, String reportPath) {
+        super(project, git, sourcePath, reportPath);
     }
 
     @Override
     String buildSource() {
-        return sourcePath + REPORT_FILE_DIR;
+        if (StringUtils.isBlank(reportPath)){
+            return sourcePath + REPORT_FILE_DIR;
+        }
+        return sourcePath + reportPath;
     }
 
     @Override
@@ -33,8 +37,6 @@ public class JacocoReportFactory extends ReportFactory {
         Coverage coverage = Optional.of(getJacocoParser()).map(BaseParser::parse).orElse(null);
         return coverage;
     }
-
-
 
     @Override
     Coverage parsingHtmlCoverageReport() {
@@ -53,6 +55,6 @@ public class JacocoReportFactory extends ReportFactory {
     }
 
     private String buildReportIndex() {
-        return buildSource() + REPORT_INFO;
+        return buildSource() + REPORT_FILE;
     }
 }

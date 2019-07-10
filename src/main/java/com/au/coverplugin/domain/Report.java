@@ -14,10 +14,6 @@ public class Report {
 
     private Git git;
 
-    private File file;
-
-    private String fileName;
-
     private Coverage coverage;
 
     private List<String> packageList;
@@ -29,22 +25,6 @@ public class Report {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
-    }
-
-    public File getFile() {
-        return file;
-    }
-
-    public void setFile(File file) {
-        this.file = file;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     public Coverage getCoverage() {

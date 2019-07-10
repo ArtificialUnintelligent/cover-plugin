@@ -4,13 +4,19 @@ import com.alibaba.fastjson.JSON;
 import com.au.coverplugin.domain.CoverCenterResponse;
 import com.au.coverplugin.domain.Report;
 import com.au.coverplugin.domain.ReportDOC;
+import com.au.coverplugin.domain.ReportFile;
+import com.au.coverplugin.report.ReportFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.au.coverplugin.constant.ErrorCode;
 import com.au.coverplugin.exception.ProcessingException;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Objects;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -30,46 +36,76 @@ import org.codehaus.plexus.util.StringUtils;
  */
 public class CoverClient {
     private static final ContentType MIME_TYPE = ContentType.create("application/octet-stream", "utf-8");
-    private static final String UPLOAD_PATH = "/uploadFile";
-    private static final String SUBMIT_PATH = "/uploadInfo";
+//    private static final String UPLOAD_PATH = "/uploadFile";
+//    private static final String SUBMIT_PATH = "/uploadInfo";
 
-    private final String covercenterUrl;
+    private final String url;
     private final HttpClient httpClient;
     private final ObjectMapper objectMapper;
-    private final Report report;
+    private final ReportFactory factory;
 
-    public CoverClient(String covercenterUrl, Report report) {
-        this(covercenterUrl, new HttpClientFactory().create(), new ObjectMapper(), report);
+    /**
+     * 报告提交工具
+     * @param url 上传地址 - 可以是上传报告、提交报告概述、提交报告解析结果的接口地址
+     * @param factory
+     */
+    public CoverClient(String url, ReportFactory factory) {
+        this(url, new HttpClientFactory().create(), new ObjectMapper(), factory);
     }
 
-    public CoverClient(String covercenterUrl, HttpClient httpClient,
-        ObjectMapper objectMapper, Report report) {
-        this.covercenterUrl = covercenterUrl;
+    public CoverClient(String url, HttpClient httpClient,
+        ObjectMapper objectMapper, ReportFactory factory) {
+        this.url = url;
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
-        this.report = report;
+        this.factory = factory;
     }
 
-    public CoverCenterResponse submit() throws Exception {
+    /**
+     * 提交报告概述
+     * @return
+     * @throws Exception
+     */
+    public CoverCenterResponse submitSummary() throws Exception {
+        Report report = factory.buildHtmlReport();
+        if (Objects.isNull(report)){
+            throw new ProcessingException(ErrorCode.GET_FILE_ERROR.getMessage());
+        }
         ReportDOC reportDOC = new ReportDOC();
         reportDOC.buildReportDOC(report);
         StringEntity entity = new StringEntity(objectMapper.writeValueAsString(reportDOC), ContentType.APPLICATION_JSON);
-        HttpPost post = new HttpPost(covercenterUrl + SUBMIT_PATH);
+        HttpPost post = new HttpPost(url);
         post.setEntity(entity);
         HttpResponse response = httpClient.execute(post);
         return parseRsponse(response);
     }
 
-    public CoverCenterResponse upload(final String id) throws Exception {
-        List<String> packageList = report.getPackageList();
-        String s = JSON.toJSONString(packageList);
+    /**
+     * 提交报告详细内容-json格式
+     * @return
+     * @throws Exception
+     */
+    public CoverCenterResponse submitDetail() throws Exception {
+        String reportDetail = "";
+        StringEntity entity = new StringEntity(reportDetail, ContentType.APPLICATION_JSON);
+        HttpPost post = new HttpPost(url);
+        post.setEntity(entity);
+        HttpResponse response = httpClient.execute(post);
+        return parseRsponse(response);
+    }
+
+    /**
+     * 上传报告压缩文件
+     * @return
+     * @throws Exception
+     */
+    public CoverCenterResponse upload() throws Exception {
+        ReportFile file = factory.buildReportFile();
         HttpEntity entity = MultipartEntityBuilder.create()
-            .addBinaryBody("report", report.getFile(), MIME_TYPE, report.getFileName())
+            .addBinaryBody("report", file.getFile(), MIME_TYPE, file.getFileName())
             .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-            .addTextBody("id", id)
-            .addTextBody("packageListJson",s)
             .build();
-        HttpPost post = new HttpPost(covercenterUrl + UPLOAD_PATH);
+        HttpPost post = new HttpPost(url);
         post.setEntity(entity);
         HttpResponse response = httpClient.execute(post);
         return parseRsponse(response);

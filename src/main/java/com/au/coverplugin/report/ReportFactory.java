@@ -3,6 +3,7 @@ package com.au.coverplugin.report;
 import com.au.coverplugin.domain.Coverage;
 import com.au.coverplugin.domain.Git;
 import com.au.coverplugin.domain.Report;
+import com.au.coverplugin.domain.ReportFile;
 import com.au.coverplugin.util.ZipUtils;
 
 import java.io.File;
@@ -17,8 +18,6 @@ import java.util.List;
  */
 public abstract class ReportFactory {
 
-    private static final String TARGET_PATH;
-
     private static final String TARGET_TYPE;
 
     private static final String REPORT_NAME;
@@ -29,30 +28,32 @@ public abstract class ReportFactory {
 
     String sourcePath;
 
+    String reportPath;
+
     private Report report = new Report();
 
-    public ReportFactory(String project, Git git, String sourcePath) {
+    public ReportFactory(String project, Git git, String sourcePath, String reportPath) {
         this.project = project;
         this.git = git;
         this.sourcePath = sourcePath;
+        this.reportPath = reportPath;
+    }
+
+    public ReportFile buildReportFile() throws IOException{
+        File file = ZipUtils.compress(buildSource(), buildTarget());
+        return new ReportFile(buildReportFileName(), file);
     }
 
     public Report buildReport() throws IOException {
-        File file = ZipUtils.compress(buildSource(), buildTarget());
         report.setProjectName(project);
-        report.setFile(file);
         report.setGit(git);
-        report.setFileName(buildReportFileName());
         report.setCoverage(parsingCoverageReport());
         return report;
     }
 
     public Report buildHtmlReport() throws IOException {
-        File file = ZipUtils.compress(buildSource(), buildTarget());
         report.setProjectName(project);
-        report.setFile(file);
         report.setGit(git);
-        report.setFileName(buildReportFileName());
         report.setCoverage(parsingHtmlCoverageReport());
         File file2 = new File(buildSource());
         File[] files = file2.listFiles();
@@ -68,7 +69,7 @@ public abstract class ReportFactory {
     }
 
     private String buildTarget(){
-        return sourcePath + TARGET_PATH + buildReportFileName();
+        return sourcePath + reportPath + buildReportFileName();
     }
 
     private String buildReportFileName(){
@@ -86,7 +87,6 @@ public abstract class ReportFactory {
     abstract Coverage parsingHtmlCoverageReport();
 
     static {
-        TARGET_PATH = "/";
         TARGET_TYPE = ".zip";
         REPORT_NAME = "coverage-report";
     }

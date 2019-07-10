@@ -104,17 +104,17 @@ public class CoverClientTest {
         coverage.setLineCovered(200);
         coverage.setLineMissed(500);
         Report r = new Report();
-        r.setFile(new File("src/test/files/target/coverage-xmlevent.zip"));
-        r.setFileName("coverage-xmlevent.zip");
+//        r.setFile(new File("src/test/files/target/coverage-xmlevent.zip"));
+//        r.setFileName("coverage-xmlevent.zip");
         r.setGit(git);
         r.setCoverage(coverage);
 //        System.setProperty("http.proxySet", "true");
 //        System.setProperty("http.proxyHost", "172.18.10.209");172.18.10.209
 //        System.setProperty("http.proxyPort", "8888");
         //TODO: cover center address
-        CoverClient coverClient = new CoverClient("http://localhost:10099/coverReports", r);
-        String id = coverClient.submit().getData();
-        CoverCenterResponse response = coverClient.upload(id);
-        System.out.println(response);
+//        CoverClient coverClient = new CoverClient("http://localhost:10099/coverReports", r);
+//        String id = coverClient.submit().getData();
+//        CoverCenterResponse response = coverClient.upload(id);
+//        System.out.println(response);
     }
 }

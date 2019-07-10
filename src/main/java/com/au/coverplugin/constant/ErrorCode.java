@@ -12,7 +12,8 @@ public enum  ErrorCode {
     REPORT_SUBMIT_FAIL("Report submission to Covercenter API failed with HTTP status"),
     SKIP_PLUGIN("Skip property set, skipping cover-plugin execution"),
     UPLOAD_ERROR("upload report failed"),
-    NON_EXISTENT(" file is non-existent")
+    NON_EXISTENT(" file is non-existent"),
+    GET_FILE_ERROR("get report file error")
     ;
 
     private String message;
